@@ -1,0 +1,2 @@
+-- Baseline inicial do banco
+-- Controle de versão iniciado com Flyway
