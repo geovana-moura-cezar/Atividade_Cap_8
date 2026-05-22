@@ -3,6 +3,7 @@ package br.com.fiap.gestao_residuos.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -29,10 +30,10 @@ public class Descarte {
     @Column(nullable = false)
     private LocalDate dataDescarte;
 
-    private Double quantidade;
+    private BigDecimal quantidade;
     private String status;
 
-    @ManyToOne
+    @ManyToOne@JoinColumn(name = "residuo_id", nullable = false)
     private Residuo residuo;
 
     @JoinColumn(name = "local_coleta_id", nullable = false)

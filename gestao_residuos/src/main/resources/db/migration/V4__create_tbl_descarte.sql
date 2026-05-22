@@ -8,7 +8,7 @@ CREATE TABLE tbl_descarte (
                               id NUMBER PRIMARY KEY,
 
                               data_descarte DATE NOT NULL,
-                              quantidade NUMBER NOT NULL,
+                              quantidade NUMBER(10,2) NOT NULL,
                               status VARCHAR2(50) NOT NULL,
 
                               residuo_id NUMBER NOT NULL,

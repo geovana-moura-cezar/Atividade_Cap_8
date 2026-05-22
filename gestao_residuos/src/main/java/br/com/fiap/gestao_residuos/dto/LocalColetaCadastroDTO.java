@@ -3,6 +3,8 @@ package br.com.fiap.gestao_residuos.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 public record LocalColetaCadastroDTO(
 
         Long id,
@@ -14,6 +16,6 @@ public record LocalColetaCadastroDTO(
         String endereco,
 
         @NotNull
-        Double capacidadeMaxima
+        BigDecimal capacidadeMaxima
 ) {
 }
