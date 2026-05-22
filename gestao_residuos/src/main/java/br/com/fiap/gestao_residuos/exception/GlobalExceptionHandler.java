@@ -1,13 +1,18 @@
 package br.com.fiap.gestao_residuos.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -38,8 +43,11 @@ public class GlobalExceptionHandler {
     ){
 
         String mensagem = ex.getBindingResult()
-                .getFieldError()
-                .getDefaultMessage();
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("Erro de validação");
 
         ErroRespostaDTO erro = new ErroRespostaDTO(
                 LocalDateTime.now(),
@@ -68,6 +76,38 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.internalServerError().body(erro);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroRespostaDTO> tratarIntegridade(
+            DataIntegrityViolationException ex,
+            HttpServletRequest request
+    ){
+        ErroRespostaDTO erro = new ErroRespostaDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflito de dados",
+                "Usuário já cadastrado!",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErroRespostaDTO> tratarAcessoNegado(
+            AccessDeniedException ex,
+            HttpServletRequest request
+    ){
+        ErroRespostaDTO erro = new ErroRespostaDTO(
+                LocalDateTime.now(),
+                HttpStatus.FORBIDDEN.value(),
+                "Acesso negado",
+                "Você não possui permissão para acessar este recurso",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
     }
 
 }

@@ -4,12 +4,13 @@ import br.com.fiap.gestao_residuos.model.Descarte;
 import br.com.fiap.gestao_residuos.model.LocalColeta;
 import br.com.fiap.gestao_residuos.model.Residuo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record DescarteExibicaoDTO(
         Long id,
         LocalDate dataDescarte,
-        Double quantidade,
+        BigDecimal quantidade,
         String status,
         String residuoNome,
         String enderecoColeta

@@ -1,4 +1,4 @@
-CREATE SEQUENCE seq_residuos
+CREATE SEQUENCE seq_residuo
     START WITH 1
     INCREMENT BY 1
     NOCACHE

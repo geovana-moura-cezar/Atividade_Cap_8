@@ -3,6 +3,8 @@ package br.com.fiap.gestao_residuos.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "tbl_local_coleta")
 @Getter
@@ -31,6 +33,6 @@ public class LocalColeta {
     private String endereco;
 
     @Column(name = "capacidade_maxima", nullable = false)
-    private Double capacidadeMaxima;
+    private BigDecimal capacidadeMaxima;
 
 }

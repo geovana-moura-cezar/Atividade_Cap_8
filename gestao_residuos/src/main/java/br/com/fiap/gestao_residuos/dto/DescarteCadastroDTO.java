@@ -4,6 +4,7 @@ import br.com.fiap.gestao_residuos.model.LocalColeta;
 import br.com.fiap.gestao_residuos.model.Residuo;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record DescarteCadastroDTO(
@@ -12,7 +13,7 @@ public record DescarteCadastroDTO(
         LocalDate dataDescarte,
 
         @NotNull
-        Double quantidade,
+        BigDecimal quantidade,
 
         String status,
 

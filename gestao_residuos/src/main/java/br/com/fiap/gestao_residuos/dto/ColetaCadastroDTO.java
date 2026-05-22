@@ -13,6 +13,8 @@ public record ColetaCadastroDTO(
         @NotNull
         LocalDate dataSolicitacao,
 
+        LocalDate dataRealizacao,
+
         @NotNull
         Long localColetaId
 ) {
