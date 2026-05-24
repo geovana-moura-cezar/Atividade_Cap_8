@@ -1,8 +1,6 @@
 package br.com.fiap.gestao_residuos.dto;
 
 import br.com.fiap.gestao_residuos.model.Alerta;
-import br.com.fiap.gestao_residuos.model.LocalColeta;
-import br.com.fiap.gestao_residuos.repository.AlertaRepository;
 
 import java.time.LocalDate;
 

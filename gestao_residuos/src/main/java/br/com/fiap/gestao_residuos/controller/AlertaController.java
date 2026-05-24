@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +25,13 @@ public class AlertaController {
             Pageable paginacao
     ){
         return service.listarTodos(paginacao);
+    }
+
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public ResponseEntity<AlertaExibicaoDTO> buscarPorId(@PathVariable Long id){
+        return ResponseEntity
+                .ok(service.buscarPorId(id));
+
     }
 }

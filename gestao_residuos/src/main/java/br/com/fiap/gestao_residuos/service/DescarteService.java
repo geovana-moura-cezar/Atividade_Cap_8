@@ -1,6 +1,5 @@
 package br.com.fiap.gestao_residuos.service;
 
-import br.com.fiap.gestao_residuos.dto.ColetaExibicaoDTO;
 import br.com.fiap.gestao_residuos.dto.DescarteCadastroDTO;
 import br.com.fiap.gestao_residuos.dto.DescarteExibicaoDTO;
 import br.com.fiap.gestao_residuos.model.Descarte;

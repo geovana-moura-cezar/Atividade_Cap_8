@@ -28,20 +28,37 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+
+                        // AUTH
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/descartes").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/residuos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/local-coleta").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/coletas").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/descartes").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/residuos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/local-coleta").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/coletas").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/descartes").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/residuos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/local-coleta").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/coletas").hasRole("ADMIN")
+
+                        // POST - SOMENTE ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/descartes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/residuos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/local-coleta/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/coletas/**").hasRole("ADMIN")
+
+                        // PUT - SOMENTE ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/api/descartes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/residuos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/local-coleta/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/coletas/**").hasRole("ADMIN")
+
+                        // DELETE - SOMENTE ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/api/descartes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/residuos/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/local-coleta/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/coletas/**").hasRole("ADMIN")
+
+                        //USUÁRIOS
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasRole("ADMIN")
+
+                        // GET - USER E ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

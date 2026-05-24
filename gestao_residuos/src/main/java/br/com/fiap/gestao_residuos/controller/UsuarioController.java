@@ -37,13 +37,6 @@ public class UsuarioController {
 
     }
 
-    // CADASTRAR
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioExibicaoDTO cadastrar(@RequestBody @Valid UsuarioCadastroDTO usuario){
-        return service.cadastrar(usuario);
-    }
-
     // ATUALIZAR
     @PutMapping
     public ResponseEntity<UsuarioExibicaoDTO> atualizar (@RequestBody @Valid UsuarioCadastroDTO usuario){
