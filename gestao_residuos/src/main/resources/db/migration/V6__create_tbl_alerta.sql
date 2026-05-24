@@ -11,7 +11,7 @@ CREATE TABLE tbl_alerta (
                             nivel NUMBER NOT NULL,
                             data_criacao DATE NOT NULL,
 
-                            local_coleta_id NUMBER NOT NULL,
+                            local_coleta_id NUMBER,
 
                             CONSTRAINT fk_alerta_local
                                 FOREIGN KEY (local_coleta_id)

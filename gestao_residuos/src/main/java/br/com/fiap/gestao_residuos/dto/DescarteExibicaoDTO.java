@@ -1,8 +1,6 @@
 package br.com.fiap.gestao_residuos.dto;
 
 import br.com.fiap.gestao_residuos.model.Descarte;
-import br.com.fiap.gestao_residuos.model.LocalColeta;
-import br.com.fiap.gestao_residuos.model.Residuo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
