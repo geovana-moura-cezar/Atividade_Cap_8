@@ -30,25 +30,26 @@ public class VerificarToken extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader("Authorization");
-        String token = "";
 
-        if (authorizationHeader == null){
-            token = null;
-        } else {
-            token = authorizationHeader.replace("Bearer", "").trim();
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7).trim();
             String login = tokenService.validarToken(token);
-            UserDetails usuario = usuarioRepository.findByEmail(login);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            usuario,
-                            null,
-                            usuario.getAuthorities()
-                    );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (login != null && !login.isBlank()) {
+                UserDetails usuario = usuarioRepository.findByEmail(login);
+
+                if (usuario != null) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    usuario,
+                                    null,
+                                    usuario.getAuthorities()
+                            );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
