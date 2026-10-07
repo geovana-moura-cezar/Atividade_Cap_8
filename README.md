@@ -1,337 +1,315 @@
-# ♻️ Gestão de Resíduos e Reciclagem - API RESTful
+# Projeto - Gestao de Residuos e Reciclagem | Cidades ESG Inteligentes
 
-## 📌 Sobre o Projeto
+Projeto ESG desenvolvido em Java/Spring Boot e evoluido nesta fase com praticas de DevOps: testes automatizados, containerizacao, Docker Compose, GitHub Actions e deploy em dois ambientes no Azure.
 
-Este projeto foi desenvolvido como atividade avaliativa da disciplina de Java Advanced utilizando Spring Boot.
+## Sobre o projeto
 
-A aplicação tem como objetivo auxiliar no gerenciamento de resíduos e reciclagem, promovendo práticas sustentáveis alinhadas ao tema ESG.
+A API apoia o gerenciamento de residuos e reciclagem, permitindo trabalhar com usuarios, residuos, locais de coleta, descartes, coletas e alertas. O projeto-base foi preservado e recebeu uma camada DevOps para automatizar build, testes e promocao entre ambientes.
 
-O sistema oferece recursos para:
+## Tecnologias utilizadas
 
-* Cadastro e autenticação de usuários
-* Controle de resíduos recicláveis
-* Cadastro de locais de coleta
-* Controle de coletas seletivas
-* Registro de descartes
-* Geração de alertas
-* Segurança com autenticação JWT
-* Controle de acesso por perfis (USER e ADMIN)
+- Java 21
+- Spring Boot 4.0.6
+- Spring Web MVC
+- Spring Data JPA
+- Spring Security
+- JWT
+- Bean Validation
+- Oracle Database
+- Flyway
+- H2 para testes do CI
+- JUnit 5 e Mockito
+- Swagger / OpenAPI
+- Maven
+- Docker e Docker Compose
+- Docker Hub
+- GitHub Actions
+- Azure App Service
 
-A API foi construída seguindo os princípios RESTful, utilizando Spring Security, Oracle Database, Flyway e Docker.
-
----
-
-# 🌱 Tema ESG Escolhido
-
-## Gestão de Resíduos e Reciclagem
-
-### Objetivos do sistema
-
-* Incentivar o descarte correto de resíduos
-* Monitorar coletas seletivas
-* Registrar descartes realizados
-* Gerar alertas automáticos
-* Auxiliar práticas sustentáveis
-* Melhorar a gestão ambiental
-
----
-
-# 🛠️ Tecnologias Utilizadas
-
-## Backend
-
-* Java 21
-* Spring Boot 4
-* Spring Web
-* Spring Data JPA
-* Spring Security
-* JWT Authentication
-* Maven
-
-## Banco de Dados
-
-* Oracle Database
-
-## Migração de Banco
-
-* Flyway
-
-## Conteinerização
-
-* Docker
-* Docker Compose
-
----
-
-# 📂 Estrutura do Projeto
+## Estrutura
 
 ```text
-src
-├── main
-│   ├── java
-│   │   └── br.com.fiap.gestao_residuos
-│   │       ├── controller
-│   │       ├── service
-│   │       ├── repository
-│   │       ├── model
-│   │       ├── dto
-│   │       ├── config
-│   │       └── exception
-│   └── resources
-│       ├── db
-│       │   └── migration
-│       └── application.properties
+.
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       └── cd.yml
+├── docs/
+│   ├── EVIDENCIAS.md
+│   └── FINALIZACAO.md
+├── gestao_residuos/
+│   ├── src/
+│   ├── .env.example
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── pom.xml
+└── README.md
 ```
 
----
+## Como executar localmente com Docker
 
-# 🔐 Segurança da Aplicação
-
-A aplicação utiliza:
-
-* Spring Security
-* JWT Token
-* BCrypt Password Encoder
-* Autenticação Stateless
-* Controle de acesso por perfil
-
-## Perfis de acesso
-
-### USER
-
-Pode:
-
-* Realizar login
-* Consultar informações da API
-
-### ADMIN
-
-Pode:
-
-* Cadastrar registros
-* Atualizar registros
-* Excluir registros
-
-## Fluxo de autenticação
-
-1. Usuário realiza login
-2. API gera um token JWT
-3. O token é enviado nas requisições protegidas
-4. A API valida o token antes de liberar acesso
-
----
-
-# 🗄️ Banco de Dados
-
-O projeto utiliza Oracle Database como banco principal.
-
-As tabelas são criadas e versionadas automaticamente utilizando Flyway.
-
-## Principais entidades
-
-* Usuário
-* Resíduo
-* Coleta
-* Local de Coleta
-* Descarte
-* Alerta
-
----
-
-# 🚀 Como Executar o Projeto
-
-## Pré-requisitos
-
-* Java 21
-* Maven
-* Docker Desktop
-* Git
-
----
-
-# ▶️ Executando Localmente
-
-## 1. Extrair os arquivos da pasta .zip
-
-## 2. Entrar na pasta do projeto
+Entre na pasta da aplicacao:
 
 ```bash
 cd gestao_residuos
 ```
 
-## 3. Gerar a build do projeto
+Copie o arquivo de exemplo:
 
 ```bash
-mvn clean package
+cp .env.example .env
 ```
 
-## 4. Executar a aplicação
+No PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Suba a API e o Oracle:
 
 ```bash
-mvn spring-boot:run
+docker compose up --build -d
 ```
 
-A aplicação ficará disponível em:
+Confira:
+
+```bash
+docker compose ps
+```
+
+Swagger:
 
 ```text
-http://localhost:8080
+http://localhost:8080/swagger-ui.html
 ```
 
----
-
-# 🐳 Executando com Docker
-
-## 1. Gerar o build do projeto
+Logs:
 
 ```bash
-mvn clean package
+docker compose logs -f gestao-residuos
 ```
 
-## 2. Executar o Docker Compose
+Encerrar:
 
 ```bash
-docker compose up --build
+docker compose down
 ```
 
-A API ficará disponível em:
+O Compose utiliza **variaveis de ambiente**, **volumes nomeados** e uma **rede bridge dedicada**, atendendo aos requisitos da atividade.
+
+## Swagger / OpenAPI
+
+A documentacao interativa da API fica em:
 
 ```text
-http://localhost:8080
+http://localhost:8080/swagger-ui.html
 ```
 
----
+A especificacao OpenAPI:
 
-# 📌 Endpoints Principais
+```text
+http://localhost:8080/v3/api-docs
+```
 
-## 🔐 Autenticação
+O Swagger possui esquema Bearer/JWT. Depois do login, o token pode ser informado no botao **Authorize** para testar os endpoints protegidos.
 
-| Método | Endpoint       | Descrição                    |
-| ------ | -------------- | ---------------------------- |
-| POST   | /auth/register | Cadastro de usuário          |
-| POST   | /auth/login    | Login e geração do token JWT |
+## Testes automatizados
 
----
+O projeto possui teste de contexto Spring e testes unitarios do `ResiduoService` com JUnit e Mockito.
 
-## 👤 Usuários
+Execucao local:
 
-| Método | Endpoint      |
-| ------ | ------------- |
-| GET    | /api/usuarios |
-| GET    | /api/usuarios/{id} |
-| PUT    | /api/usuarios |
-| DELETE | /api/usuarios/{id} |
+```bash
+cd gestao_residuos
+./mvnw clean test
+```
 
----
+No CI:
 
-## ♻️ Resíduos
+```bash
+./mvnw -B clean verify
+```
 
-| Método | Endpoint      |
-| ------ | ------------- |
-| GET    | /api/residuos |
-| GET    | /api/residuos/{id} |
-| POST   | /api/residuos |
-| PUT    | /api/residuos |
-| DELETE | /api/residuos/{id} |
+Os testes usam H2 em memoria, evitando que o runner do GitHub dependa do Oracle externo apenas para validar o build.
 
----
+## Pipeline CI/CD
 
-## 🚛 Coletas
+### CI - Build e Testes
 
-| Método | Endpoint    |
-| ------ | ----------- |
-| GET    | /api/coletas |
-| GET    | /api/coletas/{id} |
-| POST   | /api/coletas |
-| PUT    | /api/coletas|
-| DELETE | /api/coletas/{id} |
+Arquivo: `.github/workflows/ci.yml`.
 
----
+O CI roda em Pull Requests para `main` e `develop` e em pushes para `develop`.
 
-## 📍 Locais de Coleta
+Etapas:
 
-| Método | Endpoint          |
-| ------ | ----------------- |
-| GET    | /api/local-coleta |
-| GET    | /api/local-coleta/{id} |
-| POST   | /api/local-coleta |
-| PUT    | /api/local-coleta |
-| DELETE | /api/local-coleta/{id} |
+1. checkout do codigo;
+2. configuracao do Java 21;
+3. build e testes com Maven;
+4. validacao do Docker Compose;
+5. build da imagem Docker;
+6. publicacao dos relatorios de teste como artefato.
 
----
+### CD - Docker Hub e Azure
 
-## 🗑️ Descartes
+Arquivo: `.github/workflows/cd.yml`.
 
-| Método | Endpoint       |
-| ------ | -------------- |
-| GET    | /api/descartes |
-| GET    | /api/descartes/{id} |
-| POST   | /api/descartes |
-| PUT    | /api/descartes |
-| DELETE | /api/descartes/{id} |
+O CD roda quando o codigo aprovado chega a `main`.
 
----
+Etapas:
 
-## 🚨 Alertas
+1. build e testes;
+2. build da imagem Docker;
+3. push no Docker Hub com tag do SHA do commit e `latest`;
+4. deploy da imagem em **staging**;
+5. smoke test em `/v3/api-docs`;
+6. deploy da **mesma imagem** em **producao**;
+7. smoke test de producao.
 
-| Método | Endpoint      |
-| ------ | ------------- |
-| GET    | /api/alertas  |
-| GET    | /api/alertas/{id} |
+A mesma tag imutavel do commit e promovida entre staging e producao, evitando recompilar um artefato diferente para o ambiente final.
 
----
+## Containerizacao
 
-# 🧪 Testes da API
+O Dockerfile utiliza **multi-stage build**:
 
-Os testes da API podem ser realizados utilizando:
+- primeiro estagio: JDK 21 + Maven Wrapper para gerar o JAR;
+- segundo estagio: JRE 21 Alpine para executar a aplicacao;
+- usuario nao-root;
+- healthcheck HTTP em `/v3/api-docs`.
 
-* Insomnia
-* Postman
+O Docker Compose orquestra:
 
-A collection da API acompanha a entrega do projeto.
+- `oracle-db`: Oracle Database Free para desenvolvimento local;
+- `gestao-residuos`: API Spring Boot.
 
----
+Volumes:
 
-# ⚠️ Tratamento de Exceções
+- `oracle-data`: persistencia dos dados locais;
+- `app-logs`: persistencia dos logs.
 
-A aplicação possui tratamento global de exceções utilizando:
+Rede:
 
-* @RestControllerAdvice
-* Validação de DTOs
-* Respostas padronizadas
-* Tratamento de erros de validação
-* Tratamento de recursos não encontrados
-* Tratamento de erros internos
+- `gestao-residuos-network`.
 
----
+## Variaveis e secrets
 
-# 📈 Requisitos Atendidos
+O projeto nao deve versionar credenciais reais.
 
-✅ API RESTful
+### GitHub Repository Secrets
 
-✅ Mínimo de 4 endpoints
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
 
-✅ Spring Boot
+### Environment `staging`
 
-✅ Spring Security
+Variable:
+- `AZURE_WEBAPP_NAME`
 
-✅ JWT
+Secret:
+- `AZURE_WEBAPP_PUBLISH_PROFILE`
 
-✅ Oracle Database
+### Environment `production`
 
-✅ Flyway
+Variable:
+- `AZURE_WEBAPP_NAME`
 
-✅ Docker
+Secret:
+- `AZURE_WEBAPP_PUBLISH_PROFILE`
 
-✅ Validação de dados
+### Azure App Settings
 
-✅ Tratamento de exceções
+Em cada Web App:
 
-✅ Arquitetura em camadas
+- `DB_URL`
+- `DB_USER`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `JPA_SHOW_SQL=false`
 
-✅ Controle de acesso por perfil
+As instrucoes exatas estao em `docs/FINALIZACAO.md`.
 
----
+## Ambientes
 
-# 👨‍💻 Desenvolvido por
+### Staging
 
-Projeto desenvolvido para fins acadêmicos na FIAP.
+Preencher depois da criacao do recurso:
+
+```text
+https://<APP-STAGING>.azurewebsites.net
+https://<APP-STAGING>.azurewebsites.net/swagger-ui.html
+```
+
+### Producao
+
+Preencher depois da criacao do recurso:
+
+```text
+https://<APP-PRODUCAO>.azurewebsites.net
+https://<APP-PRODUCAO>.azurewebsites.net/swagger-ui.html
+```
+
+## Prints do funcionamento
+
+Os prints reais devem ser incluidos somente depois que o pipeline e os ambientes forem executados. O roteiro esta em `docs/EVIDENCIAS.md`.
+
+Evidencias previstas:
+
+1. CI com build e testes aprovados;
+2. build/push da imagem Docker;
+3. deploy em staging;
+4. Swagger de staging;
+5. deploy em producao;
+6. Swagger de producao;
+7. Docker Compose local (recomendado).
+
+## Desafios encontrados e solucoes
+
+### Credenciais no projeto-base
+
+**Desafio:** configuracoes sensiveis estavam gravadas diretamente no projeto anterior.
+
+**Solucao:** uso de variaveis de ambiente, `.env.example`, `.gitignore`, GitHub Secrets e Azure App Settings. Credenciais que ja apareceram no historico devem ser rotacionadas.
+
+### Testes dependentes de infraestrutura externa
+
+**Desafio:** o teste de contexto poderia depender do Oracle remoto.
+
+**Solucao:** H2 em memoria no escopo de testes, mantendo Oracle na aplicacao real.
+
+### Diferencas entre ambientes
+
+**Desafio:** garantir que desenvolvimento, staging e producao usem um runtime previsivel.
+
+**Solucao:** Docker multi-stage, Docker Compose e imagem versionada pelo SHA do commit.
+
+### Promocao para producao
+
+**Desafio:** evitar gerar um artefato diferente depois da validacao de staging.
+
+**Solucao:** promover para producao exatamente a mesma imagem Docker validada em staging.
+
+## Checklist obrigatorio
+
+Marcar os itens somente depois de validar as evidencias reais.
+
+| Item | OK |
+|---|:---:|
+| Projeto compactado em .ZIP com estrutura organizada | ☐ |
+| Dockerfile funcional | ☐ |
+| docker-compose.yml ou arquivos Kubernetes | ☐ |
+| Pipeline com etapas de build, teste e deploy | ☐ |
+| README.md com instrucoes e prints | ☐ |
+| Documentacao tecnica com evidencias (PDF ou PPT) | ☐ |
+| Deploy realizado nos ambientes staging e producao | ☐ |
+
+## O que falta para finalizar
+
+Siga, na ordem:
+
+1. `docs/FINALIZACAO.md`;
+2. execute o pipeline real;
+3. salve os prints descritos em `docs/EVIDENCIAS.md`;
+4. substitua os placeholders de URL;
+5. anexe as evidencias ao README e ao PDF final;
+6. marque o checklist;
+7. gere o ZIP final e confira antes do upload.
