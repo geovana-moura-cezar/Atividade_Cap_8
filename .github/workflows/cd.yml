@@ -1,4 +1,4 @@
-name: CD - Docker Hub e Azure
+name: CD - Docker Hub e Render
 
 on:
   push:
@@ -70,27 +70,24 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
-      url: https://${{ vars.AZURE_WEBAPP_NAME }}.azurewebsites.net
+      url: ${{ vars.RENDER_SERVICE_URL }}
 
     steps:
-      - name: Deploy do container no Azure App Service - Staging
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/gestao-residuos:${{ github.sha }}
+      - name: Acionar deploy hook do Render - Staging
+        run: |
+          curl --fail --silent --show-error --request POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
 
-      - name: Smoke test do Swagger em staging
+      - name: Aguardar e validar Swagger em staging
         shell: bash
         run: |
-          URL="https://${{ vars.AZURE_WEBAPP_NAME }}.azurewebsites.net/v3/api-docs"
-          for tentativa in {1..18}; do
+          URL="${{ vars.RENDER_SERVICE_URL }}/v3/api-docs"
+          for tentativa in {1..30}; do
             if curl --fail --silent --show-error "$URL" > /dev/null; then
               echo "Staging respondeu com sucesso."
               exit 0
             fi
-            echo "Aguardando staging... tentativa $tentativa/18"
-            sleep 10
+            echo "Aguardando staging... tentativa $tentativa/30"
+            sleep 15
           done
           exit 1
 
@@ -100,26 +97,23 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: https://${{ vars.AZURE_WEBAPP_NAME }}.azurewebsites.net
+      url: ${{ vars.RENDER_SERVICE_URL }}
 
     steps:
-      - name: Deploy da mesma imagem validada em staging
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/gestao-residuos:${{ github.sha }}
+      - name: Acionar deploy hook do Render - Producao
+        run: |
+          curl --fail --silent --show-error --request POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
 
-      - name: Smoke test do Swagger em producao
+      - name: Aguardar e validar Swagger em producao
         shell: bash
         run: |
-          URL="https://${{ vars.AZURE_WEBAPP_NAME }}.azurewebsites.net/v3/api-docs"
-          for tentativa in {1..18}; do
+          URL="${{ vars.RENDER_SERVICE_URL }}/v3/api-docs"
+          for tentativa in {1..30}; do
             if curl --fail --silent --show-error "$URL" > /dev/null; then
               echo "Producao respondeu com sucesso."
               exit 0
             fi
-            echo "Aguardando producao... tentativa $tentativa/18"
-            sleep 10
+            echo "Aguardando producao... tentativa $tentativa/30"
+            sleep 15
           done
           exit 1
