@@ -1,6 +1,6 @@
 # Projeto - Gestao de Residuos e Reciclagem | Cidades ESG Inteligentes
 
-Projeto ESG desenvolvido em Java/Spring Boot e evoluido nesta fase com praticas de DevOps: testes automatizados, containerizacao, Docker Compose, GitHub Actions e deploy em dois ambientes no Azure.
+Projeto ESG desenvolvido em Java/Spring Boot e evoluido nesta fase com praticas de DevOps: testes automatizados, containerizacao, Docker Compose, GitHub Actions e deploy em dois ambientes no Render.
 
 ## Sobre o projeto
 
@@ -24,7 +24,7 @@ A API apoia o gerenciamento de residuos e reciclagem, permitindo trabalhar com u
 - Docker e Docker Compose
 - Docker Hub
 - GitHub Actions
-- Azure App Service
+- Render
 
 ## Estrutura
 
@@ -150,7 +150,7 @@ Etapas:
 5. build da imagem Docker;
 6. publicacao dos relatorios de teste como artefato.
 
-### CD - Docker Hub e Azure
+### CD - Docker Hub e Render
 
 Arquivo: `.github/workflows/cd.yml`.
 
@@ -166,7 +166,7 @@ Etapas:
 6. deploy da **mesma imagem** em **producao**;
 7. smoke test de producao.
 
-A mesma tag imutavel do commit e promovida entre staging e producao, evitando recompilar um artefato diferente para o ambiente final.
+A imagem e gerada uma unica vez no CD, publicada no Docker Hub com a tag do SHA e tambem como `latest`. Os Deploy Hooks do Render atualizam staging e, apos o smoke test, producao. A tag de SHA fica disponivel para rastreabilidade.
 
 ## Containerizacao
 
@@ -203,28 +203,29 @@ O projeto nao deve versionar credenciais reais.
 ### Environment `staging`
 
 Variable:
-- `AZURE_WEBAPP_NAME`
+- `RENDER_SERVICE_URL`
 
 Secret:
-- `AZURE_WEBAPP_PUBLISH_PROFILE`
+- `RENDER_DEPLOY_HOOK`
 
 ### Environment `production`
 
 Variable:
-- `AZURE_WEBAPP_NAME`
+- `RENDER_SERVICE_URL`
 
 Secret:
-- `AZURE_WEBAPP_PUBLISH_PROFILE`
+- `RENDER_DEPLOY_HOOK`
 
-### Azure App Settings
+### Variaveis de ambiente no Render
 
-Em cada Web App:
+Em cada Web Service:
 
 - `DB_URL`
 - `DB_USER`
 - `DB_PASSWORD`
 - `JWT_SECRET`
 - `JPA_SHOW_SQL=false`
+- `FLYWAY_VALIDATE_ON_MIGRATE=false` (necessario neste banco academico porque migrations antigas ja aplicadas tiveram checksum alterado)
 
 As instrucoes exatas estao em `docs/FINALIZACAO.md`.
 
@@ -232,20 +233,16 @@ As instrucoes exatas estao em `docs/FINALIZACAO.md`.
 
 ### Staging
 
-Preencher depois da criacao do recurso:
-
 ```text
-https://<APP-STAGING>.azurewebsites.net
-https://<APP-STAGING>.azurewebsites.net/swagger-ui.html
+https://gestao-residuos-staging.onrender.com
+https://gestao-residuos-staging.onrender.com/swagger-ui/index.html
 ```
 
 ### Producao
 
-Preencher depois da criacao do recurso:
-
 ```text
-https://<APP-PRODUCAO>.azurewebsites.net
-https://<APP-PRODUCAO>.azurewebsites.net/swagger-ui.html
+https://gestao-residuos-production.onrender.com
+https://gestao-residuos-production.onrender.com/swagger-ui/index.html
 ```
 
 ## Prints do funcionamento
@@ -268,7 +265,7 @@ Evidencias previstas:
 
 **Desafio:** configuracoes sensiveis estavam gravadas diretamente no projeto anterior.
 
-**Solucao:** uso de variaveis de ambiente, `.env.example`, `.gitignore`, GitHub Secrets e Azure App Settings. Credenciais que ja apareceram no historico devem ser rotacionadas.
+**Solucao:** uso de variaveis de ambiente, `.env.example`, `.gitignore`, GitHub Secrets e variaveis de ambiente do Render. Credenciais que ja apareceram no historico devem ser rotacionadas.
 
 ### Testes dependentes de infraestrutura externa
 
@@ -295,12 +292,12 @@ Marcar os itens somente depois de validar as evidencias reais.
 | Item | OK |
 |---|:---:|
 | Projeto compactado em .ZIP com estrutura organizada | ☐ |
-| Dockerfile funcional | ☐ |
-| docker-compose.yml ou arquivos Kubernetes | ☐ |
-| Pipeline com etapas de build, teste e deploy | ☐ |
+| Dockerfile funcional | ☑ |
+| docker-compose.yml ou arquivos Kubernetes | ☑ |
+| Pipeline com etapas de build, teste e deploy | ☑ |
 | README.md com instrucoes e prints | ☐ |
 | Documentacao tecnica com evidencias (PDF ou PPT) | ☐ |
-| Deploy realizado nos ambientes staging e producao | ☐ |
+| Deploy realizado nos ambientes staging e producao | ☑ |
 
 ## O que falta para finalizar
 
