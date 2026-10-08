@@ -1,15 +1,56 @@
 services:
-  gestao-residuos:
-    build: .
-    container_name: gestao-residuos-api
-
-    ports:
-      - "8080:8080"
-
-    restart: always
-
+  oracle-db:
+    image: gvenzl/oracle-free:23-slim-faststart
+    container_name: gestao-residuos-oracle
+    restart: unless-stopped
     environment:
-      DB_URL: jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-      DB_USER: RM564715
-      DB_PASSWORD: 030706
-      JWT_SECRET: fiap-secret-key-123456
+      ORACLE_RANDOM_PASSWORD: "true"
+      APP_USER: ${DB_USER:-gestao}
+      APP_USER_PASSWORD: ${DB_PASSWORD:-gestao_dev_2026}
+    ports:
+      - "${ORACLE_PORT:-1521}:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    networks:
+      - gestao-residuos-network
+
+  gestao-residuos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestao-residuos-api
+    restart: unless-stopped
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      DB_URL: ${DB_URL:-jdbc:oracle:thin:@oracle-db:1521/FREEPDB1}
+      DB_USER: ${DB_USER:-gestao}
+      DB_PASSWORD: ${DB_PASSWORD:-gestao_dev_2026}
+      JWT_SECRET: ${JWT_SECRET:-troque-esta-chave-local-com-mais-de-32-caracteres}
+      SERVER_PORT: 8080
+      JPA_SHOW_SQL: ${JPA_SHOW_SQL:-false}
+      LOG_FILE: /app/logs/gestao-residuos.log
+    volumes:
+      - app-logs:/app/logs
+    networks:
+      - gestao-residuos-network
+
+volumes:
+  oracle-data:
+    name: gestao-residuos-oracle-data
+  app-logs:
+    name: gestao-residuos-app-logs
+
+networks:
+  gestao-residuos-network:
+    name: gestao-residuos-network
+    driver: bridge
