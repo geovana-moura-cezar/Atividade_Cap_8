@@ -42,19 +42,6 @@ jobs:
       - name: Construir imagem Docker
         run: docker build -t gestao-residuos:ci-${{ github.sha }} .
 
-      - name: Login no Docker Hub para publicacao inicial
-        if: github.event_name == 'pull_request' && github.head_ref == 'devops-entrega'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Publicar imagem latest no Docker Hub
-        if: github.event_name == 'pull_request' && github.head_ref == 'devops-entrega'
-        run: |
-          docker tag gestao-residuos:ci-${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/gestao-residuos:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/gestao-residuos:latest
-
       - name: Publicar relatorios de teste
         if: always()
         uses: actions/upload-artifact@v4
